@@ -1,0 +1,142 @@
+Commands : 
+--to clear screen
+	--!clear;
+
+--print database in shell.
+	--set hive.cli.print.current.db = true;
+
+is hive MPP
+
+hive bucketing and partitioning
+
+Hive UDF :
+https://www.linkedin.com/pulse/hive-functions-udfudaf-udtf-examples-gaurav-singh
+UDF --> one row column input and one output
+UTAF --> one table column input and one output e.g. mean,avg
+UDTF --> one row as input and returns multiple rows as output. e.g. explode function
+
+
+--Hive create table
+CREATE TABLE IF NOT EXISTS littlebigdata( name STRING, email STRING, bday STRING, ip STRING, gender STRING, anum INT) ROW FORMAT DELIMITED FIELDS TERMINATED BY ',';
+
+LOAD DATA LOCAL INPATH '/home/rakesh.prajapati012_gmail/littlebigdata.txt' INTO TABLE littlebigdata;
+
+#schema on read vs schema on write
+https://www.thomashenson.com/schema-read-vs-schema-write-explained/
+
+#what is HiveServer and Thrift server
+https://stackoverflow.com/questions/40924632/what-is-hiveserver-and-thrift-server
+https://community.hortonworks.com/questions/33715/why-do-we-need-to-setup-spark-thrift-server.html
+https://www.quora.com/What-is-Thrift-Server-in-Apache-Hive-and-how-does-it-work
+
+#interview question 
+https://stackoverflow.com/questions/35049403/few-hive-interview-questions
+https://stackoverflow.com/questions/43657319/where-does-the-hive-data-gets-stored
+https://stackoverflow.com/questions/5058400/where-does-hive-store-files-in-hdfs?rq=1
+
+https://saurzcode.in/2015/01/hive-sort-order-distribute-cluster/
+https://stackoverflow.com/questions/13715044/hive-cluster-by-vs-order-by-vs-sort-by
+
+#llap vs tez vs spark
+https://resources.zaloni.com/blog/tez-and-llap-improvements-to-make-hive-ter
+https://hortonworks.com/blog/top-5-performance-boosters-with-apache-hive-llap/
+https://hortonworks.com/tutorial/interactive-sql-on-hadoop-with-hive-llap/
+https://community.hortonworks.com/questions/83394/difference-between-mr-and-tez.html
+https://cwiki.apache.org/confluence/display/Hive/Hive+on+Tez#HiveonTez-Multiplereducestages
+
+#shuffling and sorting phase in the reducer in Map Reduce Programming 
+https://stackoverflow.com/questions/22141631/what-is-the-purpose-of-shuffling-and-sorting-phase-in-the-reducer-in-map-reduce
+
+##A metastore consists of two main components
+--> Services to which the client connects and queries the metastore
+	A backing database to store the metadata
+	
+##type of metastore in hive
+	--> embedded, local, remote
+https://www.quora.com/What-are-the-different-types-of-metastores-that-Hive-provides
+
+	##hive cli vs hive beeline 
+	https://community.hortonworks.com/questions/50547/connecting-hive-beeline-vs-hive.html
+
+##Hcatalog
+https://stackoverflow.com/questions/22533814/what-is-use-of-hcatalog-in-hadoop
+https://hortonworks.com/blog/hivehcatalog-data-geeks-big-data-glue/
+https://www.tutorialspoint.com/hcatalog/hcatalog_introduction.htm
+
+##hiveServer vs metastore server
+https://stackoverflow.com/questions/26055220/what-is-the-difference-between-hive-jdbc-client-and-hive-metastore-java-api
+
+#Apache Hue
+The file browser for HDFS
+The job browser for MapReduce or YARN
+Query editors for Apache Hive
+Query editors for Apache Pig
+The Apache Sqoop2 editor
+The Apache ZooKeeper browser
+The Apache HBase browser
+
+
+##hive varchar vs string datatype
+https://community.hortonworks.com/questions/48260/hive-string-vs-varchar-performance.html
+
+##hive datatypes
+	-->It supports different conversions. The timestamp value provided as an integer numeric type is interpreted as a UNIX timestamp in seconds; a timestamp value provided as a floating point numeric type is interpreted as a UNIX timestamp in seconds with decimal precision; the timestamp value provided as string is interpreted as the java.sql.Timestamp format YYYY-MM-DD HH:MM:SS.fffffffff.
+	-->If the timestamp value is in another format than yyyy-mm-dd hh:mm:ss[.f...], then UDF can be used to convert them to the timestamp format. The Date type is used to represent only the date part of timestamp, that is, YYYY-MM-DD. This type doesn't represent the time of day component. The Date ranges allowed are 0000-01-01 to 9999-12-31.
+	-->The Date types can be casted in the Date, Timestamp, or String types and vice versa.
+
+	
+##Partitioning
+	-->Partitioning in Hive is done using the PARTITIONED BY clause in the create table statement of table. Table can have one or more partitions. A table can be partitioned on the basis of one or more columns. The columns on which partitioning is done cannot be included in the data of table. For example, you have the four fields id, name, age, and city, and you want to partition the data on the basis of the city field, then the city field will not be included in the columns of create table statement and will only be used in the PARTITIONED BY clause. You can still query the data in a normal way using where city=xyz. The result will be retrieved from the respective partition because data is stored in a different directory with the city name for each city.
+
+	When you have large data with high number of partitions, executing query without any partition filters might trigger an enormous MapReduce job. To avoid such cases, there is the map-reduce mode configuration hive.mapred.mode, which prevents running risky queries on Hive. The default value of hive.mapred.mode is set to nonstrict. This mode specifies how Hive operations are being performed. By setting the value of hive.mapred.mode to strict, it will prevent running risky queries. For example, in strict mode, you cannot run a full table scan query:	
+	
+## hive dynamic partition vs static partition
+	-->https://stackoverflow.com/questions/30921515/main-difference-between-dynamic-and-static-partitioning-in-hive
+	
+##Bucketing
+In bucketing the following two bullet points need to be considered:
+	-->In partitioning, a column defined as a partitioned column is not included in a schema columns of a Hive table. But in bucketing, a column defined as a bucketed column is included in the schema columns of the Hive table.
+	-->We cannot use the LOAD DATA statement to load the data into the bucketed table as we do in partitioned table. Rather, we have to use the INSERT statements to insert data by selecting data from some other table.
+
+##Hive Temporary table
+-->https://community.hortonworks.com/articles/9337/hive-temporary-tables.html
+
+##Hive external table
+	-->http://blog.zhengdong.me/2012/02/22/hive-external-table-with-partitions/
+	
+##Hive skwed table
+	-->https://stackoverflow.com/questions/18766721/skewed-tables-in-hive
+	-->https://community.hortonworks.com/content/supportkb/48808/a-hive-join-query-is-slow-because-it-is-stuck-for.html
+
+##hive update query
+	Rows that match the WHERE clause/criteria will be updated
+	Partitioning columns cannot be updated
+	Bucketing columns cannot be updated
+	Update is not possible on tables that are created using the SORTED BY clause
+
+##hive delete query
+	Deletion is not possible on tables that are created using the SORTED BY clause.
+
+##hive views
+Hive supports only non-materialized views and as it does not support materialized data
+
+##Hive indexes
+	-->https://community.hortonworks.com/questions/18093/creating-indexes-in-hive.html
+	-->https://acadgild.com/blog/indexing-in-hive/
+	
+	
+##Hive left semi join
+https://stackoverflow.com/questions/25041026/hive-left-semi-join-for-not-exists
+
+##map-side join
+https://www.edureka.co/blog/map-side-join-vs-join/
+https://www.quora.com/What-is-a-map-join-and-a-bucket-join-in-Hive
+
+##bucket join 
+https://www.quora.com/What-is-a-map-join-and-a-bucket-join-in-Hive
+
+##reduce the number of mappers
+https://stackoverflow.com/questions/38459195/how-to-reduce-number-of-mappers-when-i-am-running-hive-query
+https://cwiki.apache.org/confluence/display/TEZ/How+initial+task+parallelism+works
+https://community.hortonworks.com/questions/905/how-are-number-of-mappers-determined-for-a-query-w.html
+
